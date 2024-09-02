@@ -28,5 +28,13 @@ public class Feed extends BaseTimestampEntity {
     @Column(nullable = false, name = "like_count")
     private Long likeCount;
 
+    public Feed(User user_id,String title, String content, Long likeCount) {
+        this.user_id = user_id;
+        this.title = title;
+        this.content = content;
+        this.likeCount = likeCount;
+
+    }
+
 
 }
