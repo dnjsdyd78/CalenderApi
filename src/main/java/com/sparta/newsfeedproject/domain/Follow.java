@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Table(name = "follow")
 public class Follow {
 
     @Id

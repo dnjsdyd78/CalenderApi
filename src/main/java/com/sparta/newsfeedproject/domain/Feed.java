@@ -18,7 +18,7 @@ public class Feed extends BaseTimestampEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user_id;
+    private User user;
 
     @Column(length = 50)
     private String title;

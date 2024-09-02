@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Table(name = "user")
 public class User extends BaseTimestampEntity{
 
     @Id

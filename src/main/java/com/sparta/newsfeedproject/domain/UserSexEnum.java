@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum UserSexEnum {
-    USER(Authority.MAIL),  // 사용자 권한
-    ADMIN(Authority.FEMAIL);  // 관리자 권한
+    MALE(Authority.MALE),  // 사용자 권한
+    FEMALE(Authority.FEMALE);  // 관리자 권한
 
     private final String authority;
 
@@ -14,7 +14,7 @@ public enum UserSexEnum {
     }
 
     public static class Authority {
-        public static final String MAIL = "MAIL";
-        public static final String FEMAIL = "FEMAIL";
+        public static final String MALE = "MAIL";
+        public static final String FEMALE = "FEMAIL";
     }
 }
