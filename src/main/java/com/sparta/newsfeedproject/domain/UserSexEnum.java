@@ -2,8 +2,6 @@ package com.sparta.newsfeedproject.domain;
 
 import lombok.Getter;
 
-import lombok.Getter;
-
 @Getter
 public enum UserSexEnum {
     USER(Authority.MAIL),  // 사용자 권한
