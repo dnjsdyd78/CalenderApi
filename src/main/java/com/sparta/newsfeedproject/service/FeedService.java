@@ -1,14 +1,14 @@
 package com.sparta.newsfeedproject.service;
 
 import com.sparta.newsfeedproject.repository.FeedRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class FeedService {
 
-    @Autowired
-    private FeedRepository feedRepository;
+    private final FeedRepository feedRepository;
 
 
 

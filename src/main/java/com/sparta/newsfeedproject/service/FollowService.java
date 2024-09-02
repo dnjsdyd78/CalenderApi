@@ -1,14 +1,14 @@
 package com.sparta.newsfeedproject.service;
 
 import com.sparta.newsfeedproject.repository.FollowRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class FollowService {
 
-    @Autowired
-    private FollowRepository followRepository;
+    private final FollowRepository followRepository;
 
 
 
