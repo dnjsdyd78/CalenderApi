@@ -2,7 +2,7 @@ package com.sparta.newsfeedproject.controller;
 
 
 import com.sparta.newsfeedproject.annotation.Auth;
-import com.sparta.newsfeedproject.config.JwtUtil;
+import com.sparta.newsfeedproject.config.JwtConfig;
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.UserWithdrawalRequestDto;
 import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
@@ -12,7 +12,6 @@ import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -48,7 +47,7 @@ public class UserController {
         try {
             String token = URLEncoder.encode(userResponseDto.getJwtToken(), "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
 
-            res.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+            res.setHeader(JwtConfig.AUTHORIZATION_HEADER, token);
 
             // jwt 는 body 에 넣으면 보안에 좋지 않음
             userResponseDto.setJwtToken("");
