@@ -3,10 +3,15 @@ package service;
 import com.sparta.newsfeedproject.domain.Feed;
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.FeedSaveRequestDto;
+import com.sparta.newsfeedproject.dto.response.FeedDetailResponseDto;
 import com.sparta.newsfeedproject.dto.response.FeedSaveResponseDto;
+import com.sparta.newsfeedproject.dto.response.FeedSimpleResponseDto;
 import com.sparta.newsfeedproject.repository.FeedRepository;
 import com.sparta.newsfeedproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +21,13 @@ public class FeedService {
     private FeedRepository feedRepository;
     private UserRepository userRepository;
 
+    //게시글(피드) 작성
     @Transactional
     public FeedSaveResponseDto saveFeed(FeedSaveRequestDto feedSaveRequestDto) {
         //UserId로 User객체 조회
-        User user = userRepository.findById(feedSaveRequestDto.getUserId()).orElseThrow(()->new NullPointerException("User ID가 존재하지 않습니다."));
+        User user = userRepository.findById(feedSaveRequestDto.getUserId()).orElseThrow(() -> new NullPointerException("User ID가 존재하지 않습니다."));
 
-        Feed feed = new Feed(user, feedSaveRequestDto.getTitle(), feedSaveRequestDto.getContent(), 0L);
+        Feed feed = new Feed(user, feedSaveRequestDto.getTitle(), feedSaveRequestDto.getContent(),0L);
         Feed savedFeed = feedRepository.save(feed);
 
         return new FeedSaveResponseDto(
@@ -29,6 +35,40 @@ public class FeedService {
                 savedFeed.getTitle(),
                 savedFeed.getContent(),
                 savedFeed.getLikeCount()
+        );
+    }
+
+    //피드 목록 조회
+    public Page<FeedSimpleResponseDto> getFeeds(Long userId, int page) {
+        //제공된 사용자 ID(id)를 기반으로 해당 사용자의 피드만을 조회하므로, 기본적으로 다른 사용자의 피드를 조회할 수 없음
+        // ->로그인한 사용자와 요청된 id가 일치하는지 확인하는 로직을 추가하는게 좋을까..? 굳이 안해도 되나?
+        User user = userRepository.findById(userId).orElseThrow(() -> new NullPointerException("User ID가 존재하지 않습니다."));
+
+        //10개씩 페이지네이션 : 각 페이지 당 뉴스피드 데이터가 10개씩 나오게 + 기본정렬이 생성일자 기준 내림차순
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Feed> feedPage = feedRepository.findAllByUser(user, pageRequest);
+
+        //각 피드 엔티티를 DetailResponseDto로 변환해서 페이지 결과 반환
+        return feedPage.map(feed -> new FeedSimpleResponseDto(
+                feed.getId(),
+                feed.getTitle(),
+                feed.getContent(),
+                feed.getLikeCount()
+
+        ));
+    }
+
+    public FeedDetailResponseDto getFeedDetail(Long feedId) {
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new NullPointerException("피드가 없습니다."));
+
+        return new FeedDetailResponseDto(
+                feed.getId(),
+                feed.getTitle(),
+                feed.getContent(),
+                feed.getUser_id().getUserName(),
+                feed.getLikeCount(),
+                feed.getCreatedAt().toString(),
+                feed.getUpdatedAt().toString()
         );
     }
 }
