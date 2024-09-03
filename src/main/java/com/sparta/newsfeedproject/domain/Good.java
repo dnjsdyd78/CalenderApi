@@ -1,36 +1,34 @@
 package com.sparta.newsfeedproject.domain;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Builder
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "follow")
-public class Follow {
+@Entity
+public class Good {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 나를 팔로우 하는 사람 (팔로워)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id")
-    private User follower;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    // 내가 팔로우 하는 사람 (팔로잉)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_id")
-    private User following;
+    @JoinColumn(name = "feed_id")
+    private Feed feed;
 
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdAt;
+
 }

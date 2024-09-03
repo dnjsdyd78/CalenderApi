@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "user")
 public class User extends BaseTimestampEntity{
 
     @Id
@@ -30,8 +31,8 @@ public class User extends BaseTimestampEntity{
 
     private LocalDate birth;
 
-    @Column(nullable = false, name = "sex", length = 6)
+    @Column(nullable = false, name = "gender", length = 6)
     @Enumerated(value = EnumType.STRING)
-    private UserSexEnum sex;
+    private UserGenderEnum gender;
 
 }
