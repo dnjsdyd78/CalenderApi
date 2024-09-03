@@ -2,7 +2,6 @@ package com.sparta.newsfeedproject.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
@@ -32,8 +31,8 @@ public class User extends BaseTimestampEntity{
 
     private LocalDate birth;
 
-    @Column(nullable = false, name = "sex", length = 6)
+    @Column(nullable = false, name = "gender", length = 6)
     @Enumerated(value = EnumType.STRING)
-    private UserSexEnum sex;
+    private UserGenderEnum gender;
 
 }
