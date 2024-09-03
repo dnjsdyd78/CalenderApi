@@ -3,13 +3,13 @@ package com.sparta.newsfeedproject.domain;
 import lombok.Getter;
 
 @Getter
-public enum UserSexEnum {
+public enum UserGenderEnum {
     MALE(Authority.MALE),  // 사용자 권한
     FEMALE(Authority.FEMALE);  // 관리자 권한
 
     private final String authority;
 
-    UserSexEnum(String authority) {
+    UserGenderEnum(String authority) {
         this.authority = authority;
     }
 
