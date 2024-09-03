@@ -26,13 +26,7 @@ public class FeedService {
         Feed savedFeed = findFeed.update(requestDto);
 
 
-        FeedResponseDto responseDto = FeedResponseDto.builder()
-                .id(requestDto.getId())
-                .title(requestDto.getTitle())
-                .content(requestDto.getContent())
-                .updateAt(savedFeed.getUpdatedAt())
-                .build();
-        return responseDto;
+        return new FeedResponseDto(savedFeed);
     }
 
     public void deleteFeed(Long id) {

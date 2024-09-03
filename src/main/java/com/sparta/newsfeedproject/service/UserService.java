@@ -17,15 +17,7 @@ public class UserService {
         User findUser = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("일치하는 유저가 없습니다."));
 
-       UserResponseDto responseDto = UserResponseDto
-               .builder()
-               .id(id)
-               .name(findUser.getUserName())
-               .email(findUser.getEmail())
-               .birth(findUser.getBirth())
-               .gender(findUser.getGender())
-               .build();
 
-        return responseDto;
+        return new UserResponseDto(findUser);
     }
 }

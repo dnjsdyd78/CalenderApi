@@ -24,7 +24,6 @@ public class Feed extends BaseTimestampEntity {
     @Column(length = 50)
     private String title;
 
-    @Column
     private String content;
 
     @Column(nullable = false, name = "like_count")

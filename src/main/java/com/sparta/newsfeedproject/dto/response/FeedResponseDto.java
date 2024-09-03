@@ -1,6 +1,7 @@
 package com.sparta.newsfeedproject.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.newsfeedproject.domain.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,8 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-// null값은 JSON응답에서 제외
-@JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class FeedResponseDto {
     private Long id;
@@ -21,4 +20,11 @@ public class FeedResponseDto {
     private Long likeCount;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+
+    public FeedResponseDto(Feed feed) {
+        this.id = feed.getId();
+        this.title = feed.getTitle();
+        this.content = feed.getContent();
+        this.updateAt = feed.getUpdatedAt();
+    }
 }
