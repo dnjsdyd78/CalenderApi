@@ -1,5 +1,6 @@
 package com.sparta.newsfeedproject.domain;
 
+import com.sparta.newsfeedproject.dto.response.FeedRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,10 +24,15 @@ public class Feed extends BaseTimestampEntity {
     @Column(length = 50)
     private String title;
 
+    @Column
     private String content;
 
     @Column(nullable = false, name = "like_count")
     private Long likeCount;
 
-
+    public Feed update(FeedRequestDto requestDto){
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        return this;
+    }
 }
