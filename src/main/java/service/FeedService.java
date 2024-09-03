@@ -46,7 +46,7 @@ public class FeedService {
 
         //10개씩 페이지네이션 : 각 페이지 당 뉴스피드 데이터가 10개씩 나오게 + 기본정렬이 생성일자 기준 내림차순
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Feed> feedPage = feedRepository.findAllByUser(user, pageRequest);
+        Page<Feed> feedPage = feedRepository.findByUserId(user, pageRequest);
 
         //각 피드 엔티티를 DetailResponseDto로 변환해서 페이지 결과 반환
         return feedPage.map(feed -> new FeedSimpleResponseDto(
@@ -65,7 +65,7 @@ public class FeedService {
                 feed.getId(),
                 feed.getTitle(),
                 feed.getContent(),
-                feed.getUser_id().getUserName(),
+                feed.getUserId().getUserName(),
                 feed.getLikeCount(),
                 feed.getCreatedAt().toString(),
                 feed.getUpdatedAt().toString()

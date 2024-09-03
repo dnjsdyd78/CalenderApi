@@ -7,5 +7,5 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeedRepository extends JpaRepository<Feed, Long> {
-    Page<Feed> findAllByUser(User user, PageRequest pageRequest);
+    Page<Feed> findByUserId(User userId, PageRequest pageRequest);
 }
