@@ -6,5 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
-  Page<Follow> findAllByOrderByCreatedAtDesc(Pageable pageable);
+  Page<Follow> findAllByFollowing_IdOrderByCreatedAtDesc(Long userId, Pageable pageable);
+
+
+
+
 }
