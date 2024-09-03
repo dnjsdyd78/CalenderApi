@@ -1,18 +1,19 @@
 package com.sparta.newsfeedproject.domain;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+
 import java.time.LocalDateTime;
 
-@Entity
-@Builder
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "follow")
-public class Follow {
+@Entity
+public class Good {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +23,9 @@ public class Follow {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Long relationship_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feed_id")
+    private Feed feed;
 
     @Column(updatable = false)
     @CreatedDate
