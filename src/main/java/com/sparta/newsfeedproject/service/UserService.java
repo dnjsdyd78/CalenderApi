@@ -4,7 +4,6 @@ import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.UserDto;
 import com.sparta.newsfeedproject.config.JwtUtil;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
-import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.UserWithdrawalRequestDto;
 import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
 import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
@@ -31,7 +30,7 @@ public class UserService {
         newUser.setUserName(userDto.getUserName());
         newUser.setPassword(userDto.getPassword());
         newUser.setPhoneNumber(userDto.getPhoneNumber());
-        newUser.setIdEmail(userDto.getIdEmail());
+        newUser.setEmail(userDto.getIdEmail());
         newUser.setBirth(userDto.getBirth());
         newUser.setGender(userDto.getGender());
 

@@ -20,7 +20,7 @@ public class User extends BaseTimestampEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String idEmail;
+    private String email;
 
     @Column(name = "user_name")
     private String userName;
