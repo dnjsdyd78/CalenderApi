@@ -34,4 +34,13 @@ public class Feed extends BaseTimestampEntity {
         this.content = requestDto.getContent();
         return this;
     }
+    public Feed(User user,String title, String content, Long likeCount) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.likeCount = likeCount;
+
+    }
+
+
 }
