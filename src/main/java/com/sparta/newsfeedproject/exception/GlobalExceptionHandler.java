@@ -28,6 +28,12 @@ public class GlobalExceptionHandler{
         return getErrorResponse(status, ex.getMessage());
     }
 
+
+    @ExceptionHandler(EncodingErrorException.class)
+    public ResponseEntity<CommonResponseDto<Object>> handleEncodingErrorException(EncodingErrorException ex) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return getErrorResponse(status, ex.getMessage());
+    }
     // end 특정 exception 에 대한 글로벌 처리
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

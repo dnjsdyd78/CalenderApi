@@ -2,6 +2,7 @@ package com.sparta.newsfeedproject.service;
 
 
 import com.sparta.newsfeedproject.config.JwtUtil;
+import com.sparta.newsfeedproject.exception.EncodingErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,9 @@ public class JwtService {
         try {
             token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
         } catch (UnsupportedEncodingException e) {
-            log.info("Error creating token" + e.getMessage());
-        } finally {
-
+            throw new EncodingErrorException("인코딩에러가 발생하였습니다.");
         }
+
         return token;
     }
 

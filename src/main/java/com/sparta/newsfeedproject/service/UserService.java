@@ -2,7 +2,6 @@ package com.sparta.newsfeedproject.service;
 
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.UserDto;
-import com.sparta.newsfeedproject.config.JwtUtil;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
 import com.sparta.newsfeedproject.dto.request.UserWithdrawalRequestDto;
 import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
@@ -37,6 +36,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    @Transactional
     public UserResponseDto updateUser(User tokenUser, UserUpdateRequestDto userUpdateRequestDto) {
 
         User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
@@ -71,6 +71,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void userWithdrawal(User tokenUser, UserWithdrawalRequestDto userWithdrawalRequestDto) {
         User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
 

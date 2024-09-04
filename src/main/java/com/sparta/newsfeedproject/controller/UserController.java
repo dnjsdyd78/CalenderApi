@@ -12,7 +12,6 @@ import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.service.JwtService;
 import com.sparta.newsfeedproject.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<CommonResponseDto<UserResponseDto>> userLogin(HttpServletResponse res, @Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
+    public ResponseEntity<CommonResponseDto<UserResponseDto>> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
 
         UserResponseDto userResponseDto = userService.login(userLoginRequestDto);
 
