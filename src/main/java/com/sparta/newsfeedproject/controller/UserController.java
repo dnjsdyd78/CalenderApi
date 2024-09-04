@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/user/withdrawal")
-    public ResponseEntity<CommonResponseDto<Void>> userWithdrawal(@Auth User tokenUser, @Valid @RequestBody UserWithdrawalRequestDto userWithdrawalRequestDto){
+    public ResponseEntity<CommonResponseDto<Void>> userWithdrawal(@Auth UserTokenDto tokenUser, @Valid @RequestBody UserWithdrawalRequestDto userWithdrawalRequestDto){
 
         userService.userWithdrawal(tokenUser, userWithdrawalRequestDto);
 

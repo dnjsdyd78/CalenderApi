@@ -34,6 +34,18 @@ public class GlobalExceptionHandler{
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         return getErrorResponse(status, ex.getMessage());
     }
+
+    @ExceptionHandler(DeletedAccountException.class)
+    public ResponseEntity<CommonResponseDto<Object>> handleDeleteAccountException(DeletedAccountException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return getErrorResponse(status, ex.getMessage());
+    }
+
+    @ExceptionHandler(DeletedException.class)
+    public ResponseEntity<CommonResponseDto<Object>> handleDeleteErrorException(DeletedException ex) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return getErrorResponse(status, ex.getMessage());
+    }
     // end 특정 exception 에 대한 글로벌 처리
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

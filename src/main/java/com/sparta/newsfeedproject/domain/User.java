@@ -3,8 +3,11 @@ package com.sparta.newsfeedproject.domain;
 import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -14,12 +17,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user")
+@SQLDelete(sql = "UPDATE user SET deleted_at = SYSDATE() WHERE id = ?")
+@Where(clause = "deleted_at is null")
 public class User extends BaseTimestampEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(name = "user_name")
@@ -35,6 +41,10 @@ public class User extends BaseTimestampEntity{
     @Column(nullable = false, name = "gender", length = 6)
     @Enumerated(value = EnumType.STRING)
     private UserGenderEnum gender;
+
+
+    private LocalDateTime deletedAt;
+
 
     // token 용도
     public User(Long id, String email) {
