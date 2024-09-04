@@ -44,14 +44,14 @@ public class FeedController {
         return ResponseEntity.ok(feed);
     }
 
-    //팔로우한 사람들의 뉴스피드 조회
+    /*//팔로우한 사람들의 뉴스피드 조회
     @GetMapping("api/feed/followed/{userId}")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFollowFeeds(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0")int page){
         Page<FeedSimpleResponseDto> feeds = feedService.getFollowFeeds(userId, page);
         return ResponseEntity.ok(feeds);
-    }
+    }*/
 
 
     @PatchMapping("/feed/{id}")

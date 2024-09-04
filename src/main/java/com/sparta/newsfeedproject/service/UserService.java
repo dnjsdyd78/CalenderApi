@@ -2,7 +2,6 @@ package com.sparta.newsfeedproject.service;
 
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.UserDto;
-import com.sparta.newsfeedproject.config.JwtUtil;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
 import com.sparta.newsfeedproject.dto.request.UserWithdrawalRequestDto;
 import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
@@ -26,13 +25,14 @@ public class UserService {
   
     @Transactional
     public User signUp(UserDto userDto) {
+
         User newUser = new User();
         newUser.setUserName(userDto.getUserName());
-        newUser.setPassword(userDto.getPassword());
         newUser.setPhoneNumber(userDto.getPhoneNumber());
-        newUser.setEmail(userDto.getIdEmail());
+        newUser.setEmail(userDto.getEmail());
         newUser.setBirth(userDto.getBirth());
         newUser.setGender(userDto.getGender());
+        newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         return userRepository.save(newUser);
     }

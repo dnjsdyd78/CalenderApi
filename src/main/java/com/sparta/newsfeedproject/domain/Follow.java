@@ -21,8 +21,8 @@ public class Follow {
 
     // 나를 팔로우 하는 사람 (팔로워)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follower_id")
-    private User follower;
+    @JoinColumn(name = "standard_id")
+    private User standard;
 
     // 내가 팔로우 하는 사람 (팔로잉)
     @ManyToOne(fetch = FetchType.LAZY)

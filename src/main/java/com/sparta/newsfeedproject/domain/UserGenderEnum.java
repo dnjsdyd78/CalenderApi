@@ -14,7 +14,7 @@ public enum UserGenderEnum {
     }
 
     public static class Authority {
-        public static final String MALE = "MAIL";
-        public static final String FEMALE = "FEMAIL";
+        public static final String MALE = "MALE";
+        public static final String FEMALE = "FEMALE";
     }
 }

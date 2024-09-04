@@ -31,6 +31,6 @@ public class UserDto {
   private LocalDate birth;
 
   @Email
-  private String idEmail;
+  private String email;
 
 }

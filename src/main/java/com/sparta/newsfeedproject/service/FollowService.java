@@ -18,17 +18,17 @@ public class FollowService {
   private final FollowRepository followRepository;
   private final UserRepository userRepository;
 
-  // 유저ID로 팔로워들 조회
+/*  // 유저ID로 팔로워들 조회
   public Page<Follow> findFollowersById(Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    return followRepository.findAllByFollower_IdOrderByCreatedAtDesc(userId, pageable);
-  }
-
-  @Transactional
-  public void followUser(String followerUsername, String followingUsername) {
-    User follower = userRepository.findByUserName(followerUsername);
-    User following = userRepository.findByUserName(followingUsername);
-  }
+    return followRepository.findAllByFollowerIdOrderByCreatedAtDesc(userId, pageable);
+  }*/
+//
+//  @Transactional
+//  public void followUser(String followerUsername, String followingUsername) {
+//    User follower = userRepository.findByUserName(followerUsername);
+//    User following = userRepository.findByUserName(followingUsername);
+//  }
 
   public Page<Follow> getFollowers(int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
@@ -37,8 +37,8 @@ public class FollowService {
 
   // 유저ID로 팔로잉 단일 삭제
   @Transactional
-  public void deleteByFollowingId(Long followingId) {
-    followRepository.deleteByFollowing_Id(followingId);
+  public void deleteByFollowingId(User user, Long followingId) {
+    followRepository.deleteByFollowing_IdAndStandardId(user.getId(), followingId);
   }
 }
 

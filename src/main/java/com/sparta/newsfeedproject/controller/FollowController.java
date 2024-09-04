@@ -1,6 +1,8 @@
 package com.sparta.newsfeedproject.controller;
 
+import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.domain.Follow;
+import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,20 +16,20 @@ public class FollowController {
 
   private final FollowService followService;
 
-  @GetMapping("/follow")
+/*  @GetMapping("/follow")
   public List<Follow> getFollowers(@RequestParam Long userId, @RequestParam int page, @RequestParam int size) {
     return followService.findFollowersById(userId, page, size).getContent();
-  }
+  }*/
 
   @DeleteMapping("/follow/delete")
-  public ResponseEntity<String> deleteFollowing(@RequestParam Long followingId) {
-    followService.deleteByFollowingId(followingId);
+  public ResponseEntity<String> deleteFollowing(@Auth User user, @RequestParam Long followingId) {
+    followService.deleteByFollowingId(user, followingId);
     return ResponseEntity.ok("언팔로우 완료");
   }
 
-  @PostMapping("/follow/add")
-  public void followUser(@RequestParam String follower, @RequestParam String following) {
-      followService.followUser(follower, following);
-  }
+//  @PostMapping("/follow/add")
+//  public void followUser(@RequestParam String follower, @RequestParam String following) {
+//      followService.followUser(follower, following);
+//  }
 
 }
