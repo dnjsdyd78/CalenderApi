@@ -1,13 +1,10 @@
 package com.sparta.newsfeedproject.controller;
 
 
-import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.*;
 import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.config.JwtConfig;
 import com.sparta.newsfeedproject.domain.User;
-import com.sparta.newsfeedproject.dto.request.UserWithdrawalRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.service.JwtService;
@@ -41,7 +38,7 @@ public class UserController {
 
 
     @PatchMapping("/profile/update")
-    public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth User tokenUser, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+    public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth UserTokenDto tokenUser, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
         UserResponseDto userResponseDto = userService.updateUser(tokenUser, userUpdateRequestDto);
 

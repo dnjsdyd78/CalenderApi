@@ -1,11 +1,8 @@
 package com.sparta.newsfeedproject.service;
 
 import com.sparta.newsfeedproject.domain.User;
-import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.*;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
-import com.sparta.newsfeedproject.dto.request.UserWithdrawalRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.exception.DeleteException;
 import com.sparta.newsfeedproject.exception.InvalidPasswordException;
@@ -37,9 +34,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateUser(User tokenUser, UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto updateUser(UserTokenDto tokenUser, UserUpdateRequestDto userUpdateRequestDto) {
 
-        User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
+        User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
 
         user.userUpdate(userUpdateRequestDto);
 
@@ -76,7 +73,13 @@ public class UserService {
         User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
 
         try {
-            userRepository.delete(user);
+
+            boolean checkPassword = passwordEncoder.matches(userWithdrawalRequestDto.getPassword(), user.getPassword());
+            if(checkPassword){
+                userRepository.delete(user);
+            }else{
+                throw new InvalidPasswordException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+            }
         } catch (DeleteException e) {
             throw new DeleteException(HttpStatus.INTERNAL_SERVER_ERROR, "삭제도중 알수없는 오류가 발생하였습니다.");
         }
