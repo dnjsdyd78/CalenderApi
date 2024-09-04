@@ -28,8 +28,8 @@ public class FeedController {
     private final FeedService feedService;
     //feed 작성
     @PostMapping("/feed/save")
-    public ResponseEntity<FeedSaveResponseDto> saveFeed(@Auth User tokenUser, @RequestBody FeedSaveRequestDto feedSaveRequestDto) {
-        return ResponseEntity.ok(feedService.saveFeed(feedSaveRequestDto));
+    public ResponseEntity<FeedSaveResponseDto> saveFeed(@Auth UserTokenDto tokenUser, @RequestBody FeedSaveRequestDto feedSaveRequestDto) {
+        return ResponseEntity.ok(feedService.saveFeed(tokenUser,feedSaveRequestDto));
     }
 
     //특정 유저의 feed 목록 조회

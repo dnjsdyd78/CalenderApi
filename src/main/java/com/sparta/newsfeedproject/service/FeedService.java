@@ -56,9 +56,9 @@ public class FeedService {
 
     //게시글(피드) 작성
     @org.springframework.transaction.annotation.Transactional
-    public FeedSaveResponseDto saveFeed(FeedSaveRequestDto feedSaveRequestDto) {
+    public FeedSaveResponseDto saveFeed(UserTokenDto tokenUser,FeedSaveRequestDto feedSaveRequestDto) {
         //UserId로 User객체 조회
-        User user = userRepository.findById(feedSaveRequestDto.getUserId()).orElseThrow(() -> new NullPointerException("User ID가 존재하지 않습니다."));
+        User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NullPointerException("User ID가 존재하지 않습니다."));
 
         Feed feed = new Feed(user, feedSaveRequestDto.getTitle(), feedSaveRequestDto.getContent(),0L);
         Feed savedFeed = feedRepository.save(feed);
