@@ -72,4 +72,12 @@ public class UserService {
             throw new DeleteException(HttpStatus.INTERNAL_SERVER_ERROR, "삭제도중 알수없는 오류가 발생하였습니다.");
         }
     }
+
+    public UserResponseDto getProfile(Long id) {
+        User findUser = userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("일치하는 유저가 없습니다."));
+
+
+        return new UserResponseDto(findUser);
+    }
 }

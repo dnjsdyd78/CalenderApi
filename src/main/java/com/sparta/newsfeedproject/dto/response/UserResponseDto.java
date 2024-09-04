@@ -2,6 +2,7 @@ package com.sparta.newsfeedproject.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.domain.UserGenderEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,4 +33,11 @@ public class UserResponseDto {
 
     private String jwtToken;
 
+    public UserResponseDto(User user) {
+        this.id = user.getId();
+        this.userName = user.getUserName();
+        this.email = user.getEmail();
+        this.birth = user.getBirth();
+        this.gender = user.getGender();
+    }
 }

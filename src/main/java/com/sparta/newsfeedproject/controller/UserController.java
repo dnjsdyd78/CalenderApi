@@ -66,5 +66,11 @@ public class UserController {
         return new ResponseEntity<>(new CommonResponseDto<>(HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), null), HttpStatus.OK);
     }
 
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<CommonResponseDto> getProfile(@PathVariable Long id){
+        UserResponseDto responseDto = userService.getProfile(id);
+
+        return new ResponseEntity<>(new CommonResponseDto<>(200, "success", responseDto), HttpStatus.OK);
+    }
 
 }
