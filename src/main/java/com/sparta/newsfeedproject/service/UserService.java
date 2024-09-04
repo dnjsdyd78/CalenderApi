@@ -25,6 +25,9 @@ public class UserService {
   
     @Transactional
     public User signUp(UserDto userDto) {
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
 
         User newUser = new User();
         newUser.setUserName(userDto.getUserName());
