@@ -1,5 +1,7 @@
 package com.sparta.newsfeedproject.service;
 
+import com.sparta.newsfeedproject.domain.User;
+import com.sparta.newsfeedproject.dto.request.UserDto;
 import com.sparta.newsfeedproject.config.JwtUtil;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
 import com.sparta.newsfeedproject.domain.User;
@@ -14,14 +16,27 @@ import com.sparta.newsfeedproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+  
+    @Transactional
+    public User signUp(UserDto userDto) {
+        User newUser = new User();
+        newUser.setUserName(userDto.getUserName());
+        newUser.setPassword(userDto.getPassword());
+        newUser.setPhoneNumber(userDto.getPhoneNumber());
+        newUser.setIdEmail(userDto.getIdEmail());
+        newUser.setBirth(userDto.getBirth());
+        newUser.setGender(userDto.getGender());
+
+        return userRepository.save(newUser);
+    }
 
     private final JwtUtil jwttuil;
 

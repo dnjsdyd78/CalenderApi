@@ -1,6 +1,7 @@
 package com.sparta.newsfeedproject.controller;
 
 
+import com.sparta.newsfeedproject.dto.request.UserDto;
 import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.config.JwtConfig;
 import com.sparta.newsfeedproject.domain.User;
@@ -14,6 +15,11 @@ import com.sparta.newsfeedproject.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +32,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
     private final JwtService jwtService;
+  
+    @PostMapping("/user/signup")
+    public ResponseEntity<String> signUp(@RequestBody UserDto userDto) {
+        userService.signUp(userDto);
+        return ResponseEntity.ok("회원가입 완료");
+    }
+
 
 
     @PatchMapping("/profile/update")

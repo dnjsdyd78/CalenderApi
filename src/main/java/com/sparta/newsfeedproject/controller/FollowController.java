@@ -4,10 +4,8 @@ package com.sparta.newsfeedproject.controller;
 import com.sparta.newsfeedproject.domain.Follow;
 import com.sparta.newsfeedproject.service.FollowService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,13 +14,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FollowController {
 
-    private final FollowService followService;
+  private final FollowService followService;
 
-    @GetMapping("/follow")
-    public List<Follow> findFollowers(@RequestParam int page, @RequestParam int size) {
-      return followService.getFollowers(page, size).getContent();
-    }
 
+
+  @GetMapping("/follow")
+  public List<Follow> getFollowers(@RequestParam Long userId, @RequestParam int page, @RequestParam int size) {
+    return followService.findFollowersById(userId, page, size).getContent();
+  }
+
+  @DeleteMapping("/follow/delete")
+  public ResponseEntity<String> deleteFollowing(@RequestParam Long followingId) {
+    followService.deleteByFollowingId(followingId);
+    return ResponseEntity.ok("언팔로우 완료");
+  }
 
 
 }

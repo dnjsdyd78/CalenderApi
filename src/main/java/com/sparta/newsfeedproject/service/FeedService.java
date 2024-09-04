@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FeedService {
 
+
     private final FeedRepository feedRepository;
 
     @Transactional
