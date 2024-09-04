@@ -46,15 +46,12 @@ public class UserService {
 
         if (checkPassword) {
 
-            String token = jwttuil.createToken(user.getId(), userLoginRequestDto.getEmail());
-
             return UserResponseDto.builder()
                     .id(user.getId())
                     .email(user.getEmail())
                     .phoneNumber(user.getPhoneNumber())
                     .birth(user.getBirth())
                     .gender(user.getGender())
-                    .jwtToken(token)
                     .build();
 
         } else {

@@ -31,8 +31,6 @@ public class UserResponseDto {
 
     private UserGenderEnum gender;
 
-    private String jwtToken;
-
     public UserResponseDto(User user) {
         this.id = user.getId();
         this.userName = user.getUserName();

@@ -9,6 +9,7 @@ import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
 import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
+import com.sparta.newsfeedproject.service.JwtService;
 import com.sparta.newsfeedproject.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -18,9 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 @Slf4j(topic = "userLoginController")
 @RestController
 @RequestMapping("/api")
@@ -28,6 +26,8 @@ import java.net.URLEncoder;
 public class UserController {
 
     private final UserService userService;
+
+    private final JwtService jwtService;
 
 
     @PatchMapping("/profile/update")
@@ -44,18 +44,12 @@ public class UserController {
 
         UserResponseDto userResponseDto = userService.login(userLoginRequestDto);
 
-        try {
-            String token = URLEncoder.encode(userResponseDto.getJwtToken(), "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
+        String token = jwtService.createToken(userResponseDto.getId(), userResponseDto.getEmail());
 
-            res.setHeader(JwtConfig.AUTHORIZATION_HEADER, token);
+        return ResponseEntity.ok()
+                .header(JwtConfig.AUTHORIZATION_HEADER, token)
+                .body(new CommonResponseDto<>(HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), userResponseDto));
 
-            // jwt 는 body 에 넣으면 보안에 좋지 않음
-            userResponseDto.setJwtToken("");
-        } catch (UnsupportedEncodingException e) {
-            log.error(e.getMessage());
-        }
-
-        return new ResponseEntity<>(new CommonResponseDto<>(HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), userResponseDto), HttpStatus.OK);
     }
 
     @PostMapping("/user/withdrawal")

@@ -20,6 +20,8 @@ import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -29,13 +31,13 @@ public class JwtUtil {
     private final JwtConfig jwtConfig;
 
     // 토큰 생성
-    public String createToken(Long userId, String email) {
+    public String createToken(Long userId, Map<String, Object> claims) {
         Date date = new Date();
 
         return JwtConfig.BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId)) // 사용자 식별자값(ID)
-                        .claim("email", email)
+                        .setClaims(claims)
 //                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한
                         .setExpiration(new Date(date.getTime() + JwtConfig.TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
