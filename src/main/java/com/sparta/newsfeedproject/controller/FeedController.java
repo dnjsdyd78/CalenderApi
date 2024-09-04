@@ -1,5 +1,7 @@
 package com.sparta.newsfeedproject.controller;
 
+import com.sparta.newsfeedproject.annotation.Auth;
+import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.request.FeedRequestDto;
 import com.sparta.newsfeedproject.dto.response.FeedResponseDto;
@@ -53,17 +55,18 @@ public class FeedController {
         return ResponseEntity.ok(feeds);
     }
 
-
+     //게시글 수정
     @PatchMapping("/feed/{id}")
-    public ResponseEntity<CommonResponseDto> updateFeed(@PathVariable Long id, @RequestBody FeedRequestDto requestDto){
-        FeedResponseDto responseDto = feedService.updateFeed(id, requestDto);
+    public ResponseEntity<CommonResponseDto> updateFeed(@PathVariable Long id, @Auth User user, @RequestBody FeedRequestDto requestDto){
+        FeedResponseDto responseDto = feedService.updateFeed(id, user, requestDto);
 
         return new ResponseEntity<>(new CommonResponseDto<>(200, "success", responseDto), HttpStatus.OK);
     }
 
+    //게시글 삭제
     @DeleteMapping("/feed/{id}")
-    public ResponseEntity<CommonResponseDto> deleteFeed(@PathVariable Long id){
-        feedService.deleteFeed(id);
+    public ResponseEntity<CommonResponseDto> deleteFeed(@PathVariable Long id, @Auth User user){
+        feedService.deleteFeed(id, user);
 
         return new ResponseEntity<>(new CommonResponseDto<>(200, "success", null), HttpStatus.OK);
 

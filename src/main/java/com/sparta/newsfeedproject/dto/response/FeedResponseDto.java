@@ -1,6 +1,5 @@
 package com.sparta.newsfeedproject.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.newsfeedproject.domain.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,8 +16,6 @@ public class FeedResponseDto {
     private Long id;
     private String title;
     private String content;
-    private Long likeCount;
-    private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
     public FeedResponseDto(Feed feed) {
