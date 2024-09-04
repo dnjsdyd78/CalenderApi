@@ -19,15 +19,15 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 나를 팔로우 하는 사람 (팔로워)
+    // 기준이 되는 사람
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "standard_id")
-    private User standard;
+    private User standardId;
 
-    // 내가 팔로우 하는 사람 (팔로잉)
+    // 기준이 팔로우 하는 사람
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id")
-    private User following;
+    private User followingId;
 
     @Column(updatable = false)
     @CreatedDate

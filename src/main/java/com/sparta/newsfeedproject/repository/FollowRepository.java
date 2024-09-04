@@ -9,18 +9,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
-//  Page<Follow> findAllByFollowerIdOrderByCreatedAtDesc(Long userId, Pageable pageable);
 
   // 팔로잉ID로 검색해서 삭제
-  void deleteByFollowing_IdAndStandardId(Long standardId, Long followingId);
+  void deleteByStandardIdAndFollowingId(User standardId, User followingId);
+  // 팔로워 목록 조회
+  Page<Follow> findByFollowingId(User followingId, Pageable pageable);
 
 
-   //특정 사용자가 팔로우한 사람들의 목록을 가져옴
-    List<Follow> findAllByFollowingId(User user);
+
+  List<Follow> findStandardIdByFollowingId(User user);
 
 //    List<Follow> findByFollower(User follower);
 
-    List<Follow> findByFollowing(User following);
+//  List<Follow> findByFollowing(User following);
 
-    Page<Follow> findAllByOrderByCreatedAtDesc(Pageable pageable);
 }
