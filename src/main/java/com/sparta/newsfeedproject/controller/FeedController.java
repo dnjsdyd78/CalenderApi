@@ -1,5 +1,9 @@
 package com.sparta.newsfeedproject.controller;
 
+import com.sparta.newsfeedproject.annotation.Auth;
+import com.sparta.newsfeedproject.domain.User;
+import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.UserTokenDto;
 import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.request.FeedRequestDto;
 import com.sparta.newsfeedproject.dto.response.FeedResponseDto;
@@ -23,33 +27,35 @@ public class FeedController {
 
     private final FeedService feedService;
     //feed 작성
-    @PostMapping("api/feed/save")
-    public ResponseEntity<FeedSaveResponseDto> saveFeed(@RequestBody FeedSaveRequestDto feedSaveRequestDto) {
+    @PostMapping("/feed/save")
+    public ResponseEntity<FeedSaveResponseDto> saveFeed(@Auth User tokenUser, @RequestBody FeedSaveRequestDto feedSaveRequestDto) {
         return ResponseEntity.ok(feedService.saveFeed(feedSaveRequestDto));
     }
 
     //특정 유저의 feed 목록 조회
-    @GetMapping("api/feed/{userId}")
+    @GetMapping("/feed/{userId}")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFeeds(
+            @Auth UserTokenDto tokenUser,
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page) {
-        Page<FeedSimpleResponseDto> feeds = feedService.getFeeds(userId, page);
+        Page<FeedSimpleResponseDto> feeds = feedService.getFeeds(tokenUser, page);
         return ResponseEntity.ok(feeds);
     }
 
     //개별 피드 조회
-    @GetMapping("/api/feed/detail/{feedId}")
+    @GetMapping("/feed/detail/{feedId}")
     public ResponseEntity<FeedDetailResponseDto> getFeedDetail(@PathVariable Long feedId) {
         FeedDetailResponseDto feed = feedService.getFeedDetail(feedId);
         return ResponseEntity.ok(feed);
     }
 
     //팔로우한 사람들의 뉴스피드 조회
-    @GetMapping("api/feed/followed/{userId}")
+    @GetMapping("/feed/followed/{userId}")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFollowFeeds(
+            @Auth UserTokenDto tokenUser,
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0")int page){
-        Page<FeedSimpleResponseDto> feeds = feedService.getFollowFeeds(userId, page);
+        Page<FeedSimpleResponseDto> feeds = feedService.getFollowFeeds(tokenUser, page);
         return ResponseEntity.ok(feeds);
     }
 
