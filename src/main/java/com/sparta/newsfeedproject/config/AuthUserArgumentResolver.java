@@ -1,7 +1,8 @@
 package com.sparta.newsfeedproject.config;
 
 import com.sparta.newsfeedproject.annotation.Auth;
-import com.sparta.newsfeedproject.domain.User;
+
+import com.sparta.newsfeedproject.dto.request.UserTokenDto;
 import io.micrometer.common.lang.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -32,6 +33,6 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         Long userId = (Long) request.getAttribute("userId");
         String email = (String) request.getAttribute("email");
 
-        return new User(userId, email);
+        return new UserTokenDto(userId, email);
     }
 }
