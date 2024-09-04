@@ -39,11 +39,7 @@ public class JwtFilter implements Filter {
                 (
                         // 허용 목록
                         url.startsWith("/api/user/login") ||
-                                url.startsWith("/api/user/edit") ||
-                                url.startsWith("/css") ||
-                                url.startsWith("/js") ||
-                                url.contains("swagger") ||
-                                url.contains("api-docs")
+                                url.startsWith("/api/user/signup")
                 )
         ) {
             chain.doFilter(request, response);

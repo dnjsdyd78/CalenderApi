@@ -30,6 +30,4 @@ public class UserResponseDto {
 
     private UserGenderEnum gender;
 
-    private String jwtToken;
-
 }
