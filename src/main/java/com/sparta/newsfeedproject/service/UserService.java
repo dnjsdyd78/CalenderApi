@@ -37,9 +37,6 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    private final JwtUtil jwttuil;
-
-
     public UserResponseDto updateUser(User tokenUser, UserUpdateRequestDto userUpdateRequestDto) {
 
         User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
@@ -90,5 +87,10 @@ public class UserService {
 
 
         return new UserResponseDto(findUser);
+    }
+
+    // 사용자 check
+    public User getUser(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new NullPointerException("해당 id 값을 가진 유저를 찾을 수 없습니다."));
     }
 }
