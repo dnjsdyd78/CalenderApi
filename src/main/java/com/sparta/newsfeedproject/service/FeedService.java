@@ -5,6 +5,7 @@ import com.sparta.newsfeedproject.domain.Follow;
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.FeedRequestDto;
 import com.sparta.newsfeedproject.dto.request.FeedSaveRequestDto;
+import com.sparta.newsfeedproject.dto.request.UserTokenDto;
 import com.sparta.newsfeedproject.dto.response.*;
 import com.sparta.newsfeedproject.repository.FeedRepository;
 import com.sparta.newsfeedproject.repository.FollowRepository;
@@ -33,37 +34,38 @@ public class FeedService {
 
 
     @Transactional
-    public FeedResponseDto updateFeed(Long id, User loginUser, FeedRequestDto requestDto) {
+    public FeedResponseDto updateFeed(Long id, UserTokenDto loginUser, FeedRequestDto requestDto) throws AccessDeniedException {
         // 게시글 작성 유저계정찾기
         Feed feed = feedRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         // 로그인 유저아이디, 게시글 작성아이디값 추출
         Long feedUserId = feed.getUser().getId();
-        Long loginUserId = loginUser.getId();
+        Long loginUserId = loginUser.getUserId();
 
         // 아이디 일치시 수정실행, 미일치시 예외처리
         try {
             if (feedUserId == loginUserId) {
                 feed.update(requestDto);
-
+                return new FeedResponseDto(feed);
             } else {
                 throw new AccessDeniedException("자신의 게시글만 수정할 수 있습니다.");
             }
         } catch (AccessDeniedException e) {
             log.error(e.getMessage());
+            throw e;
         }
-        return new FeedResponseDto(feed);
+
     }
 
-    public void deleteFeed(Long id, User loginUser) {
+    public void deleteFeed(Long id, UserTokenDto loginUser) throws AccessDeniedException {
         // 게시글 작성 유저계정찾기
         Feed feed = feedRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         // 로그인 유저아이디, 게시글 작성아이디값 추출
         Long feedUserId = feed.getUser().getId();
-        Long loginUserId = loginUser.getId();
+        Long loginUserId = loginUser.getUserId();
 
         // 아이디 일치시 수정실행, 미일치시 예외처리
         try {
@@ -74,6 +76,7 @@ public class FeedService {
             }
         } catch (AccessDeniedException e) {
             log.error(e.getMessage());
+            throw e;
         }
     }
 
