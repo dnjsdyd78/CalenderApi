@@ -1,5 +1,6 @@
 package com.sparta.newsfeedproject.domain;
 
+import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,5 +35,19 @@ public class User extends BaseTimestampEntity{
     @Column(nullable = false, name = "gender", length = 6)
     @Enumerated(value = EnumType.STRING)
     private UserGenderEnum gender;
+
+    // token 용도
+    public User(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
+    public void userUpdate(UserUpdateRequestDto userUpdateRequestDto) {
+        this.email = (userUpdateRequestDto.getEmail() != null && !userUpdateRequestDto.getEmail().trim().isEmpty()) ? userUpdateRequestDto.getEmail() : this.email;
+        this.userName = (userUpdateRequestDto.getUserName() != null && !userUpdateRequestDto.getUserName().trim().isEmpty()) ? userUpdateRequestDto.getUserName() : this.userName;
+        this.phoneNumber = (userUpdateRequestDto.getPhoneNumber() != null && !userUpdateRequestDto.getPhoneNumber().trim().isEmpty()) ? userUpdateRequestDto.getPhoneNumber() : this.phoneNumber;
+        this.birth = (userUpdateRequestDto.getBirth() != null) ? userUpdateRequestDto.getBirth() : this.birth;
+        this.gender = (userUpdateRequestDto.getGender() != null) ? userUpdateRequestDto.getGender() : this.gender;
+    }
 
 }
