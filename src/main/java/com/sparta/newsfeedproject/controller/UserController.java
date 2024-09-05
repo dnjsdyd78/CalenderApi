@@ -22,22 +22,21 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j(topic = "userLoginController")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final JwtService jwtService;
   
-    @PostMapping("/user/signup")
-    public ResponseEntity<String> signUp(@RequestBody UserDto userDto) {
+    @PostMapping("/signup")
+    public ResponseEntity<String> signUp(@Valid @RequestBody UserDto userDto) {
         userService.signUp(userDto);
         return ResponseEntity.ok("회원가입 완료");
     }
 
 
-
-    @PatchMapping("/profile/update")
+    @PatchMapping("/update")
     public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth UserTokenDto tokenUser, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
         UserResponseDto userResponseDto = userService.updateUser(tokenUser, userUpdateRequestDto);
@@ -46,7 +45,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public ResponseEntity<CommonResponseDto<UserResponseDto>> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
 
         UserResponseDto userResponseDto = userService.login(userLoginRequestDto);
@@ -59,7 +58,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/withdrawal")
+    @PostMapping("/withdrawal")
     public ResponseEntity<CommonResponseDto<Void>> userWithdrawal(@Auth UserTokenDto tokenUser, @Valid @RequestBody UserWithdrawalRequestDto userWithdrawalRequestDto){
 
         userService.userWithdrawal(tokenUser, userWithdrawalRequestDto);
@@ -67,7 +66,7 @@ public class UserController {
         return new ResponseEntity<>(new CommonResponseDto<>(HttpStatus.OK, HttpStatus.OK.getReasonPhrase(), null), HttpStatus.OK);
     }
 
-    @GetMapping("/profile/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CommonResponseDto> getProfile(@Auth UserTokenDto Token, @PathVariable Long id){
         UserResponseDto responseDto = userService.getProfile(id);
 
