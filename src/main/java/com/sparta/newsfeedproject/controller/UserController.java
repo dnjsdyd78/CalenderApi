@@ -37,7 +37,7 @@ public class UserController {
 
 
     @PatchMapping("/update")
-    public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth UserTokenDto tokenUser, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+    public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth UserTokenDto tokenUser, @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
         UserResponseDto userResponseDto = userService.updateUser(tokenUser, userUpdateRequestDto);
 
