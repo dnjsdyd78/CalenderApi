@@ -16,11 +16,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
   Page<Follow> findByFollowingId(User followingId, Pageable pageable);
 
 
+   //특정 사용자가 팔로우한 사람들의 목록을 가져옴
+    List<Follow> findAllByFollowingId(Long userId);
 
-  List<Follow> findStandardIdByFollowingId(User user);
+    List<Follow> findStandardIdByFollowingId(User user);
 
-//    List<Follow> findByFollower(User follower);
 
-//  List<Follow> findByFollowing(User following);
 
 }

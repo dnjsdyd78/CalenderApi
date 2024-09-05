@@ -27,35 +27,38 @@ public class FeedController {
 
     private final FeedService feedService;
     //feed 작성
-    @PostMapping("api/feed/save")
-    public ResponseEntity<FeedSaveResponseDto> saveFeed(@RequestBody FeedSaveRequestDto feedSaveRequestDto) {
-        return ResponseEntity.ok(feedService.saveFeed(feedSaveRequestDto));
+    @PostMapping("/feed/save")
+    public ResponseEntity<FeedSaveResponseDto> saveFeed(@Auth UserTokenDto tokenUser, @RequestBody FeedSaveRequestDto feedSaveRequestDto) {
+        FeedSaveResponseDto response = feedService.saveFeed(tokenUser, feedSaveRequestDto);
+        return ResponseEntity.ok(response);
     }
 
     //특정 유저의 feed 목록 조회
-    @GetMapping("api/feed/{userId}")
+    @GetMapping("/feed")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFeeds(
-            @PathVariable Long userId,
+            @Auth UserTokenDto tokenUser,
+            //@PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page) {
-        Page<FeedSimpleResponseDto> feeds = feedService.getFeeds(userId, page);
+        Page<FeedSimpleResponseDto> feeds = feedService.getFeeds(tokenUser, page);
         return ResponseEntity.ok(feeds);
     }
 
     //개별 피드 조회
-    @GetMapping("/api/feed/detail/{feedId}")
+    @GetMapping("/feed/detail/{feedId}")
     public ResponseEntity<FeedDetailResponseDto> getFeedDetail(@PathVariable Long feedId) {
         FeedDetailResponseDto feed = feedService.getFeedDetail(feedId);
         return ResponseEntity.ok(feed);
     }
 
-    /*//팔로우한 사람들의 뉴스피드 조회
-    @GetMapping("api/feed/followed/{userId}")
+    //팔로우한 사람들의 뉴스피드 조회
+    @GetMapping("/feed/followed")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFollowFeeds(
-            @PathVariable Long userId,
+            @Auth UserTokenDto tokenUser,
+            //@PathVariable Long userId,
             @RequestParam(defaultValue = "0")int page){
-        Page<FeedSimpleResponseDto> feeds = feedService.getFollowFeeds(userId, page);
+        Page<FeedSimpleResponseDto> feeds = feedService.getFollowFeeds(tokenUser, page);
         return ResponseEntity.ok(feeds);
-    }*/
+    }
 
      //게시글 수정
     @PatchMapping("/feed/{id}")
