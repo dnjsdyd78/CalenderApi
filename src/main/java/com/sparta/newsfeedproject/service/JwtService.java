@@ -26,6 +26,7 @@ public class JwtService {
 
         String token = jwtUtil.createToken(userId, claims);
 
+        System.out.println(token);
         try {
             token = URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
         } catch (UnsupportedEncodingException e) {

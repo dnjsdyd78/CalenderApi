@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -72,7 +74,8 @@ public class UserService {
     @Transactional
     public void userWithdrawal(UserTokenDto tokenUser, UserWithdrawalRequestDto userWithdrawalRequestDto) {
 
-        if(!userRepository.existsByIdAndDeletedAtIsNotNull(tokenUser.getUserId())) throw new DeletedAccountException(HttpStatus.BAD_REQUEST, "이미 삭제된 계정입니다.");
+        Optional<User> deleteUser = userRepository.findDeletedUserById(tokenUser.getUserId());
+        if(deleteUser.isPresent()) throw new DeletedAccountException(HttpStatus.BAD_REQUEST, "이미 삭제된 계정입니다.");
 
         User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
 
