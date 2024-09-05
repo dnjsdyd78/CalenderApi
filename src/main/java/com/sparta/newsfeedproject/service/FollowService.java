@@ -22,10 +22,10 @@ public class FollowService {
 
   // 나를 팔로우하는 사람들 조회 (페이징 포함)
   public Page<Follow> findFollowers(UserTokenDto userTokenDto, int page, int size) {
-  // 유저ID로 팔로워들 조회
-  public Page<Follow> findFollowersById(Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
-    return followRepository.findAllByFollower_IdOrderByCreatedAtDesc(userId, pageable);
+    User user = userRepository.findById(userTokenDto.getUserId())
+            .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+    return followRepository.findByFollowingId(user, pageable);
   }
 
   //팔로우 기능 구현
@@ -36,21 +36,14 @@ public class FollowService {
     User followUser = userRepository.findById(followUserId).orElseThrow(() -> new IllegalArgumentException("팔로우 할 대상을 찾을 수 없습니다"));
 
     //이미 팔로우 관계가 존재하는지 확인
-    Follow existingFollow = followRepository.findByFollowingAndFollower(followUser, user);
+    Follow existingFollow = followRepository.findByStandardIdAndFollowingId(followUser, user);
     if(existingFollow != null) {
       throw new IllegalStateException("이미 팔로우 한 대상입니다.");
     }
 
     //새로운 팔로우 관계 저장
-    Follow follow = Follow.builder().follower(user).following(followUser).build();
+    Follow follow = Follow.builder().standardId(user).followingId(followUser).build();
     followRepository.save(follow);//데이터베이스에 저장
-  }
-
-  public Page<Follow> getFollowers(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    User user = userRepository.findById(userTokenDto.getUserId())
-        .orElseThrow(() -> new RuntimeException("User not found"));
-    return followRepository.findByFollowingId(user, pageable);
   }
 
   // 유저ID로 팔로잉 단일 삭제
