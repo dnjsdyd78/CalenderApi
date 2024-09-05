@@ -32,8 +32,9 @@ public class FollowController {
   }
 
   @PostMapping("/add")
-  public void followUser(@Auth UserTokenDto userTokenDto, @RequestParam Long followUserId) {
+  public ResponseEntity<String> followUser(@Auth UserTokenDto userTokenDto, @RequestParam Long followUserId) {
       followService.followUser(userTokenDto, followUserId);
+      return ResponseEntity.ok("팔로우 완료");
   }
 
 }
