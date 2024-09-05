@@ -1,7 +1,7 @@
 package com.sparta.newsfeedproject.service;
 
 import com.sparta.newsfeedproject.domain.User;
-import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.*;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.exception.DeletedAccountException;
