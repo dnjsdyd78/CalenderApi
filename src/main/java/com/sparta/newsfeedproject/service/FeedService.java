@@ -56,7 +56,7 @@ public class FeedService {
             }
         } catch (AccessDeniedException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new AccessDeniedException("자신의 게시글만 삭제할 수 있습니다.");
         }
 
     }
@@ -79,7 +79,7 @@ public class FeedService {
             }
         } catch (AccessDeniedException e) {
             log.error(e.getMessage());
-            throw e;
+            throw new AccessDeniedException("자신의 게시글만 삭제할 수 있습니다.");
         }
     }
 
