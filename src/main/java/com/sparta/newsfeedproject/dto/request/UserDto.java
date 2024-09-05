@@ -18,6 +18,10 @@ public class UserDto {
   @NotNull(message = "이름을 채워주세요.")
   private String userName;
 
+  @Pattern(
+      regexp = "(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,15}",
+      message = "비밀번호는 8자 이상 15자 이하로, 대문자, 소문자, 숫자, 특수문자를 각각 최소 1개씩 포함해야 합니다."
+  )
   @Size(min = 8, max = 15, message = "비밀번호는 8자이상 15자이하여야 합니다.")
   private String password;
 

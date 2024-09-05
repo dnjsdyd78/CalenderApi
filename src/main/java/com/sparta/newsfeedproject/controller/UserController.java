@@ -20,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j(topic = "userLoginController")
 @RestController
 @RequestMapping("/api/user")
@@ -30,9 +33,14 @@ public class UserController {
     private final JwtService jwtService;
   
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<Map<String, Object>> signUp(@Valid @RequestBody UserDto userDto) {
         userService.signUp(userDto);
-        return ResponseEntity.ok("회원가입 완료");
+        Map<String, Object> response = new HashMap<>();
+        response.put("statusCode", 200);
+        response.put("message", "success");
+
+        // 응답을 JSON 형태로 반환
+        return ResponseEntity.ok(response);
     }
 
 
