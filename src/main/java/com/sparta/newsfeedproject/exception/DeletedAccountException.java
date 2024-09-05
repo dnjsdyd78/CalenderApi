@@ -2,11 +2,11 @@ package com.sparta.newsfeedproject.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class DeleteException extends RuntimeException {
+public class DeletedAccountException extends RuntimeException {
 
     private final HttpStatus httpStatus;
 
-    public DeleteException(HttpStatus httpStatus, String message) {
+    public DeletedAccountException(HttpStatus httpStatus, String message) {
         super(message);
         this.httpStatus = httpStatus;
     }

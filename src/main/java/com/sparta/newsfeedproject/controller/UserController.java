@@ -9,7 +9,6 @@ import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.service.JwtService;
 import com.sparta.newsfeedproject.service.UserService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +38,7 @@ public class UserController {
 
 
     @PatchMapping("/profile/update")
-    public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth User tokenUser, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+    public ResponseEntity<CommonResponseDto<UserResponseDto>> updateProfile(@Auth UserTokenDto tokenUser, @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
         UserResponseDto userResponseDto = userService.updateUser(tokenUser, userUpdateRequestDto);
 
@@ -48,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public ResponseEntity<CommonResponseDto<UserResponseDto>> userLogin(HttpServletResponse res, @Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
+    public ResponseEntity<CommonResponseDto<UserResponseDto>> userLogin(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto){
 
         UserResponseDto userResponseDto = userService.login(userLoginRequestDto);
 
@@ -61,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/user/withdrawal")
-    public ResponseEntity<CommonResponseDto<Void>> userWithdrawal(@Auth User tokenUser, @Valid @RequestBody UserWithdrawalRequestDto userWithdrawalRequestDto){
+    public ResponseEntity<CommonResponseDto<Void>> userWithdrawal(@Auth UserTokenDto tokenUser, @Valid @RequestBody UserWithdrawalRequestDto userWithdrawalRequestDto){
 
         userService.userWithdrawal(tokenUser, userWithdrawalRequestDto);
 

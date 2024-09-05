@@ -1,5 +1,6 @@
 package com.sparta.newsfeedproject.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.newsfeedproject.config.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -20,7 +23,6 @@ import java.util.regex.Pattern;
 public class JwtFilter implements Filter {
 
     private final JwtUtil jwtUtil;
-    private final Pattern authPattern = Pattern.compile("^/v\\d+/auth.*");
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -56,7 +58,9 @@ public class JwtFilter implements Filter {
 
         if (bearerJwt == null || !bearerJwt.startsWith("Bearer ")) {
             // 토큰이 없는 경우 400을 반환합니다.
-            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "JWT 토큰이 필요합니다.");
+            sendErrorResponse(httpResponse, String.valueOf(HttpServletResponse.SC_BAD_REQUEST), "JWT 토큰이 필요합니다.", null);
+
+//            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "JWT 토큰이 필요합니다.");
             return;
         }
 
@@ -73,19 +77,19 @@ public class JwtFilter implements Filter {
             chain.doFilter(request, response);
         } catch (SecurityException | MalformedJwtException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.", e);
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않는 JWT 서명입니다.");
+            sendErrorResponse(httpResponse, String.valueOf(HttpServletResponse.SC_BAD_REQUEST), "Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.", null);
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token, 만료된 JWT token 입니다.", e);
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "만료된 JWT 토큰입니다.");
+            sendErrorResponse(httpResponse, String.valueOf(HttpServletResponse.SC_BAD_REQUEST), "Expired JWT token, 만료된 JWT token 입니다.", null);
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.", e);
-            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "지원되지 않는 JWT 토큰입니다.");
+            sendErrorResponse(httpResponse, String.valueOf(HttpServletResponse.SC_BAD_REQUEST), "Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.", null);
         } catch (IllegalArgumentException e) {
             log.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.", e);
-            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 JWT 토큰입니다.");
+            sendErrorResponse(httpResponse, String.valueOf(HttpServletResponse.SC_BAD_REQUEST), "JWT claims is empty, 잘못된 JWT 토큰 입니다.", null);
         } catch (Exception e) {
             log.error("JWT 토큰 검증 중 오류가 발생했습니다.", e);
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰 검증 중 오류가 발생했습니다.");
+            sendErrorResponse(httpResponse, String.valueOf(HttpServletResponse.SC_BAD_REQUEST), "JWT 토큰 검증 중 오류가 발생했습니다.", null);
         }
     }
 
@@ -93,4 +97,24 @@ public class JwtFilter implements Filter {
     public void destroy() {
         Filter.super.destroy();
     }
+
+
+    private void sendErrorResponse(HttpServletResponse response, String statusCode, String message, Object data) throws IOException {
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // HTTP 상태 코드 설정
+        response.setContentType("application/json"); // 응답의 Content-Type을 JSON으로 설정
+        response.setCharacterEncoding("UTF-8"); // 응답의 문자 인코딩 설정
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("statusCode", statusCode);
+        responseBody.put("message", message);
+        responseBody.put("data", data);
+
+        // Map을 JSON 형식으로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(responseBody);
+
+        // JSON 응답 작성
+        response.getWriter().write(jsonResponse);
+    }
+
 }

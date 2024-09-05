@@ -3,11 +3,9 @@ package com.sparta.newsfeedproject.service;
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.UserDto;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
-import com.sparta.newsfeedproject.dto.request.UserWithdrawalRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
-import com.sparta.newsfeedproject.exception.DeleteException;
+import com.sparta.newsfeedproject.exception.DeletedAccountException;
+import com.sparta.newsfeedproject.exception.DeletedException;
 import com.sparta.newsfeedproject.exception.InvalidPasswordException;
 import com.sparta.newsfeedproject.exception.NotFoundException;
 import com.sparta.newsfeedproject.repository.UserRepository;
@@ -15,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +39,10 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public UserResponseDto updateUser(User tokenUser, UserUpdateRequestDto userUpdateRequestDto) {
+    @Transactional
+    public UserResponseDto updateUser(UserTokenDto tokenUser, UserUpdateRequestDto userUpdateRequestDto) {
 
-        User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
+        User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
 
         user.userUpdate(userUpdateRequestDto);
 
@@ -74,13 +74,25 @@ public class UserService {
         }
     }
 
-    public void userWithdrawal(User tokenUser, UserWithdrawalRequestDto userWithdrawalRequestDto) {
-        User user = userRepository.findById(tokenUser.getId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
+    @Transactional
+    public void userWithdrawal(UserTokenDto tokenUser, UserWithdrawalRequestDto userWithdrawalRequestDto) {
+
+        Optional<User> deleteUser = userRepository.findDeletedUserById(tokenUser.getUserId());
+        if(deleteUser.isPresent()) throw new DeletedAccountException(HttpStatus.BAD_REQUEST, "이미 삭제된 계정입니다.");
+
+        User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NotFoundException("해당 유저를 찾을 수 없습니다."));
 
         try {
-            userRepository.delete(user);
-        } catch (DeleteException e) {
-            throw new DeleteException(HttpStatus.INTERNAL_SERVER_ERROR, "삭제도중 알수없는 오류가 발생하였습니다.");
+            boolean checkPassword = passwordEncoder.matches(userWithdrawalRequestDto.getPassword(), user.getPassword());
+            if (checkPassword) {
+                userRepository.delete(user);
+            } else {
+                throw new InvalidPasswordException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+            }
+        } catch (InvalidPasswordException e) {
+            throw new InvalidPasswordException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        } catch (RuntimeException e) {
+            throw new DeletedException(HttpStatus.INTERNAL_SERVER_ERROR, "삭제도중 알수없는 오류가 발생하였습니다.");
         }
     }
 
