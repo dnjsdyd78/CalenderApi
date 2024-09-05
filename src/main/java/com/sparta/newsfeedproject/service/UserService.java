@@ -115,4 +115,16 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 
+    // 사용자 비밀번호 수정
+    @Transactional
+    public void updatePassword(UserTokenDto userTokenDto, String newPassword) {
+        User user = userRepository.findById(userTokenDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
+    }
+
 }

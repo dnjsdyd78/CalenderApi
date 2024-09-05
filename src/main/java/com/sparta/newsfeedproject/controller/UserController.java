@@ -74,4 +74,8 @@ public class UserController {
         return new ResponseEntity<>(new CommonResponseDto<>(200, "success", responseDto), HttpStatus.OK);
     }
 
+    @PostMapping("/{userId}/profile/password")
+    public void updatePassword(@Auth UserTokenDto userTokenDto, @RequestParam String newPassword) {
+        userService.updatePassword(userTokenDto, newPassword);
+    }
 }
