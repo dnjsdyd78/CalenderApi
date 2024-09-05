@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUserName(String username);
 
-    @Query("SELECT u FROM User u WHERE u.id = :id AND u.deletedAt IS NOT NULL")
+    @Query(value = "SELECT * FROM user WHERE id = :id AND deleted_at IS NOT NULL", nativeQuery = true)
     Optional<User> findDeletedUserById(@Param("id") Long id);
 
 }

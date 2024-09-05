@@ -81,11 +81,13 @@ public class UserService {
 
         try {
             boolean checkPassword = passwordEncoder.matches(userWithdrawalRequestDto.getPassword(), user.getPassword());
-            if(checkPassword){
+            if (checkPassword) {
                 userRepository.delete(user);
-            }else{
+            } else {
                 throw new InvalidPasswordException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
             }
+        } catch (InvalidPasswordException e) {
+            throw new InvalidPasswordException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         } catch (RuntimeException e) {
             throw new DeletedException(HttpStatus.INTERNAL_SERVER_ERROR, "삭제도중 알수없는 오류가 발생하였습니다.");
         }
