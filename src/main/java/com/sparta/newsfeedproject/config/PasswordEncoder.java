@@ -15,4 +15,10 @@ public class PasswordEncoder {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
         return result.verified;
     }
+
+    public static void main(String[] args) {
+        PasswordEncoder encoder = new PasswordEncoder();
+        System.out.println(encoder.encode("yaeji3089"));
+    }
+
 }

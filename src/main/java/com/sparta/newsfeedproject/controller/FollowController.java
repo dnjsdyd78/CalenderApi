@@ -1,6 +1,9 @@
 package com.sparta.newsfeedproject.controller;
 
+import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.domain.Follow;
+import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.UserTokenDto;
 import com.sparta.newsfeedproject.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +29,8 @@ public class FollowController {
   }
 
   @PostMapping("/follow/add")
-  public void followUser(@RequestParam String follower, @RequestParam String following) {
-      followService.followUser(follower, following);
+  public void followUser(@Auth UserTokenDto userTokenDto, @RequestParam Long followUserId) {
+      followService.followUser(userTokenDto, followUserId);
   }
 
 }

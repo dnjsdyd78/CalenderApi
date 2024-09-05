@@ -1,7 +1,9 @@
 package com.sparta.newsfeedproject.service;
 
+import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.domain.Follow;
 import com.sparta.newsfeedproject.domain.User;
+import com.sparta.newsfeedproject.dto.request.UserTokenDto;
 import com.sparta.newsfeedproject.repository.FollowRepository;
 import com.sparta.newsfeedproject.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -24,10 +26,22 @@ public class FollowService {
     return followRepository.findAllByFollower_IdOrderByCreatedAtDesc(userId, pageable);
   }
 
+  //팔로우 기능 구현
   @Transactional
-  public void followUser(String followerUsername, String followingUsername) {
-    User follower = userRepository.findByUserName(followerUsername);
-    User following = userRepository.findByUserName(followingUsername);
+  public void followUser(UserTokenDto userTokenDto, Long followUserId) {
+    //userId와 followUserId를 사용하여 User엔티티를 조회한다 / 존재하지 않을시 예외처리
+    User user = userRepository.findById(userTokenDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+    User followUser = userRepository.findById(followUserId).orElseThrow(() -> new IllegalArgumentException("팔로우 할 대상을 찾을 수 없습니다"));
+
+    //이미 팔로우 관계가 존재하는지 확인
+    Follow existingFollow = followRepository.findByFollowingAndFollower(followUser, user);
+    if(existingFollow != null) {
+      throw new IllegalStateException("이미 팔로우 한 대상입니다.");
+    }
+
+    //새로운 팔로우 관계 저장
+    Follow follow = Follow.builder().follower(user).following(followUser).build();
+    followRepository.save(follow);//데이터베이스에 저장
   }
 
   public Page<Follow> getFollowers(int page, int size) {

@@ -23,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FollowService followService;
   
     @Transactional
     public User signUp(UserDto userDto) {
@@ -93,4 +94,10 @@ public class UserService {
     public User getUser(Long id){
         return userRepository.findById(id).orElseThrow(() -> new NullPointerException("해당 id 값을 가진 유저를 찾을 수 없습니다."));
     }
+
+    //사용자 ID로 데이터베이스에서 사용자를 조회해준다
+    public User getFollow(Long userId){
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
 }

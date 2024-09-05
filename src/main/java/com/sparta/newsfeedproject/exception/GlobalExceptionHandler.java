@@ -45,4 +45,10 @@ public class GlobalExceptionHandler{
 
         return new ResponseEntity<>(new CommonResponseDto<>(status.value(), message, null), status);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<CommonResponseDto<Object>> handleRuntimeException(RuntimeException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return getErrorResponse(status, ex.getMessage());
+    }
 }
