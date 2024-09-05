@@ -81,7 +81,7 @@ public class UserController {
         return new ResponseEntity<>(new CommonResponseDto<>(200, "success", responseDto), HttpStatus.OK);
     }
 
-    @PostMapping("/{userId}/profile/password")
+    @PostMapping("/password")
     public ResponseEntity<String> updatePassword(@Auth UserTokenDto userTokenDto, @RequestParam String newPassword) {
         userService.updatePassword(userTokenDto, newPassword);
         return ResponseEntity.ok("비밀번호 변경완료");
