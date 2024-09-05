@@ -1,5 +1,6 @@
 package com.sparta.newsfeedproject.service;
 
+import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.*;
 import com.sparta.newsfeedproject.config.PasswordEncoder;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Optional;
 
 @Service
@@ -118,7 +121,12 @@ public class UserService {
     // 사용자 비밀번호 수정
     @Transactional
     public void updatePassword(UserTokenDto userTokenDto, String newPassword) {
-        User user = userRepository.findById(userTokenDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User user = userRepository.findById(userTokenDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        // 비밀번호 유효성 검사
+        if (!isValidPassword(newPassword)) {
+            throw new IllegalArgumentException("비밀번호는 8자 이상, 15자 이하이며, 영어 대문자, 영어 소문자, 특수문자를 포함해야 합니다.");
+        }
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(newPassword);
@@ -126,5 +134,12 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    private boolean isValidPassword(String password) {
+        // 비밀번호는 8자 이상, 15자 이하이며, 영어 대문자, 영어 소문자, 특수문자를 포함해야 합니다.
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,15}$";
+        return password.matches(passwordPattern);
+    }
+
 
 }
