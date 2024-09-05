@@ -143,7 +143,7 @@ public class FeedService {
         User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(()->new NullPointerException("user Id가 유효하지 않습니다."));
 
         //사용자가 팔로우한 사용자목록(팔로우목록) 조회
-        List<Follow> followList = followRepository.findAllByFollowingId(user.getId());
+        List<Follow> followList = followRepository.findAllByFollowingId(user);
         List<User> followedUsers = followList.stream()
                 .map(Follow::getStandardId) //<-follow 엔티티에서 팔로우 된 사용자 객체 가져오ㄹ ㅑ고
                 .collect(Collectors.toList());
