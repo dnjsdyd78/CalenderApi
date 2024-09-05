@@ -145,14 +145,15 @@ public class FeedService {
         //사용자가 팔로우한 사용자목록(팔로우목록) 조회
         List<Follow> followList = followRepository.findAllByFollowingId(user);
         List<User> followedUsers = followList.stream()
-                .map(Follow::getStandardId) //<-follow 엔티티에서 팔로우 된 사용자 객체 가져오ㄹ ㅑ고
+                .map(follow -> follow.getStandardId()) //<-follow 엔티티에서 팔로우 된 사용자 객체 가져오ㄹ ㅑ고
                 .collect(Collectors.toList());
-
+        log.info("debug1");
         ////10개씩 페이지네이션 : 각 페이지 당 뉴스피드 데이터가 10개씩 나오게 + 기본정렬이 생성일자 기준 내림차순
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        log.info("debug2");
         //팔로우된 사용자들의 피드를 페이징 하면서 조회
-        Page<Feed> feedPage = feedRepository.findByUserIdIn(followedUsers, pageRequest);
-
+        Page<Feed> feedPage = feedRepository.findByUserIn(followedUsers, pageRequest);
+        log.info("debug3");
         return feedPage.map(feed -> new FeedSimpleResponseDto(
                 feed.getId(),
                 feed.getTitle(),
