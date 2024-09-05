@@ -29,14 +29,15 @@ public class FeedController {
     //feed 작성
     @PostMapping("/feed/save")
     public ResponseEntity<FeedSaveResponseDto> saveFeed(@Auth UserTokenDto tokenUser, @RequestBody FeedSaveRequestDto feedSaveRequestDto) {
-        return ResponseEntity.ok(feedService.saveFeed(tokenUser,feedSaveRequestDto));
+        FeedSaveResponseDto response = feedService.saveFeed(tokenUser, feedSaveRequestDto);
+        return ResponseEntity.ok(response);
     }
 
     //특정 유저의 feed 목록 조회
-    @GetMapping("/feed/{userId}")
+    @GetMapping("/feed")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFeeds(
             @Auth UserTokenDto tokenUser,
-            @PathVariable Long userId,
+            //@PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page) {
         Page<FeedSimpleResponseDto> feeds = feedService.getFeeds(tokenUser, page);
         return ResponseEntity.ok(feeds);
@@ -50,10 +51,10 @@ public class FeedController {
     }
 
     //팔로우한 사람들의 뉴스피드 조회
-    @GetMapping("/feed/followed/{userId}")
+    @GetMapping("/feed/followed")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFollowFeeds(
             @Auth UserTokenDto tokenUser,
-            @PathVariable Long userId,
+            //@PathVariable Long userId,
             @RequestParam(defaultValue = "0")int page){
         Page<FeedSimpleResponseDto> feeds = feedService.getFollowFeeds(tokenUser, page);
         return ResponseEntity.ok(feeds);
