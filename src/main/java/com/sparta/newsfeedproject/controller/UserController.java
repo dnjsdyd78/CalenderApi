@@ -1,13 +1,10 @@
 package com.sparta.newsfeedproject.controller;
 
 
-import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.*;
 import com.sparta.newsfeedproject.annotation.Auth;
 import com.sparta.newsfeedproject.config.JwtConfig;
 import com.sparta.newsfeedproject.domain.User;
-import com.sparta.newsfeedproject.dto.request.UserWithdrawalRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserLoginRequestDto;
-import com.sparta.newsfeedproject.dto.request.UserUpdateRequestDto;
 import com.sparta.newsfeedproject.dto.response.CommonResponseDto;
 import com.sparta.newsfeedproject.dto.response.UserResponseDto;
 import com.sparta.newsfeedproject.service.JwtService;
@@ -72,7 +69,7 @@ public class UserController {
     }
 
     @GetMapping("/profile/{id}")
-    public ResponseEntity<CommonResponseDto> getProfile(@PathVariable Long id){
+    public ResponseEntity<CommonResponseDto> getProfile(@Auth UserTokenDto Token, @PathVariable Long id){
         UserResponseDto responseDto = userService.getProfile(id);
 
         return new ResponseEntity<>(new CommonResponseDto<>(200, "success", responseDto), HttpStatus.OK);
