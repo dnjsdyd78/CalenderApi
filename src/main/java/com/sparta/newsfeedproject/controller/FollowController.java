@@ -14,24 +14,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/follow")
 @RequiredArgsConstructor
 public class FollowController {
 
   private final FollowService followService;
 
-  @GetMapping("/follow")
+  @GetMapping
   public List<Follow> getFollowers(@Auth UserTokenDto userTokenDto, @RequestParam int page, @RequestParam int size) {
     return followService.findFollowers(userTokenDto, page, size).getContent();
   }
 
-  @DeleteMapping("/follow/delete")
+  @DeleteMapping("/delete")
   public ResponseEntity<String> deleteFollowing(@Auth UserTokenDto userTokenDto, @RequestParam Long followingId) {
     followService.unfollow(userTokenDto, followingId);
     return ResponseEntity.ok("언팔로우 완료");
   }
 
-  @PostMapping("/follow/add")
+  @PostMapping("/add")
   public void followUser(@Auth UserTokenDto userTokenDto, @RequestParam Long followUserId) {
       followService.followUser(userTokenDto, followUserId);
   }

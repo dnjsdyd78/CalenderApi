@@ -21,20 +21,20 @@ import java.nio.file.AccessDeniedException;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/feed")
 @RequiredArgsConstructor
 public class FeedController {
 
     private final FeedService feedService;
     //feed 작성
-    @PostMapping("/feed/save")
+    @PostMapping("/save")
     public ResponseEntity<FeedSaveResponseDto> saveFeed(@Auth UserTokenDto tokenUser, @RequestBody FeedSaveRequestDto feedSaveRequestDto) {
         FeedSaveResponseDto response = feedService.saveFeed(tokenUser, feedSaveRequestDto);
         return ResponseEntity.ok(response);
     }
 
     //특정 유저의 feed 목록 조회
-    @GetMapping("/feed")
+    @GetMapping
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFeeds(
             @Auth UserTokenDto tokenUser,
             //@PathVariable Long userId,
@@ -44,14 +44,14 @@ public class FeedController {
     }
 
     //개별 피드 조회
-    @GetMapping("/feed/detail/{feedId}")
+    @GetMapping("/{feedId}")
     public ResponseEntity<FeedDetailResponseDto> getFeedDetail(@PathVariable Long feedId) {
         FeedDetailResponseDto feed = feedService.getFeedDetail(feedId);
         return ResponseEntity.ok(feed);
     }
 
     //팔로우한 사람들의 뉴스피드 조회
-    @GetMapping("/feed/followed")
+    @GetMapping("/followed")
     public ResponseEntity<Page<FeedSimpleResponseDto>> getFollowFeeds(
             @Auth UserTokenDto tokenUser,
             //@PathVariable Long userId,
@@ -60,8 +60,8 @@ public class FeedController {
         return ResponseEntity.ok(feeds);
     }
 
-     //게시글 수정
-    @PatchMapping("/feed/{id}")
+    //게시글 수정
+    @PatchMapping("/{id}")
     public ResponseEntity<CommonResponseDto> updateFeed(@PathVariable Long id, @Auth UserTokenDto user, @RequestBody FeedRequestDto requestDto) throws AccessDeniedException{
         FeedResponseDto responseDto = feedService.updateFeed(id, user, requestDto);
 
@@ -69,7 +69,7 @@ public class FeedController {
     }
 
     //게시글 삭제
-    @DeleteMapping("/feed/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<CommonResponseDto> deleteFeed(@PathVariable Long id, @Auth UserTokenDto user) throws AccessDeniedException{
         feedService.deleteFeed(id, user);
 
