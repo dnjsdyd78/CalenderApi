@@ -5,6 +5,8 @@ import com.sparta.newsfeedproject.domain.Follow;
 import com.sparta.newsfeedproject.domain.User;
 import com.sparta.newsfeedproject.dto.request.UserDto;
 import com.sparta.newsfeedproject.dto.request.UserTokenDto;
+import com.sparta.newsfeedproject.dto.request.UserDto;
+import com.sparta.newsfeedproject.dto.request.UserTokenDto;
 import com.sparta.newsfeedproject.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,9 @@ public class FollowController {
     return ResponseEntity.ok("언팔로우 완료");
   }
 
-//  @PostMapping("/follow/add")
-//  public void followUser(@RequestParam String follower, @RequestParam String following) {
-//      followService.followUser(follower, following);
-//  }
+  @PostMapping("/follow/add")
+  public void followUser(@Auth UserTokenDto userTokenDto, @RequestParam Long followUserId) {
+      followService.followUser(userTokenDto, followUserId);
+  }
 
 }

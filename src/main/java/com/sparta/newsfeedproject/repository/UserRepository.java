@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user WHERE id = :id AND deleted_at IS NOT NULL", nativeQuery = true)
     Optional<User> findDeletedUserById(@Param("id") Long id);
 
+    Optional<User> findById(Long id);//ID로 사용자 조회
+
 }

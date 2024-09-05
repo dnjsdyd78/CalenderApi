@@ -21,6 +21,8 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     List<Follow> findStandardIdByFollowingId(User user);
 
+    //팔로워와 팔로잉 관계를 조회
+    Follow findByFollowingAndFollower(User follower, User following);
 
 
 }
