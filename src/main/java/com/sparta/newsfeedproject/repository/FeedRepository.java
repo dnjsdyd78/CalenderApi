@@ -13,5 +13,5 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     //특정 사용자(userId)에 대해 페이지네이션된 피드를 조회
     Page<Feed> findByUserId(Long userId, PageRequest pageRequest);
     //여러 사용자의 피드를 페이징해서 들고옴
-    Page<Feed> findByUserIdIn(List<User> users, PageRequest pageRequest);
+    Page<Feed> findByUserIn(List<User> users, PageRequest pageRequest);
 }
