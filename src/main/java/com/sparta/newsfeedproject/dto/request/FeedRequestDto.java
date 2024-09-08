@@ -1,15 +1,19 @@
 package com.sparta.newsfeedproject.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
+import com.sparta.newsfeedproject.domain.Feed;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 
 
-public class FeedRequestDto {
+public class FeedRequestDto{
     private String title;
     private String content;
+
+    public Feed toEntity(){
+        return Feed.builder()
+                .title(this.title)
+                .content(this.content)
+                .build();
+    }
 }

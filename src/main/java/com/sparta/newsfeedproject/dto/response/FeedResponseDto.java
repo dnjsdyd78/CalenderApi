@@ -1,14 +1,12 @@
 package com.sparta.newsfeedproject.dto.response;
 
 import com.sparta.newsfeedproject.domain.Feed;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 

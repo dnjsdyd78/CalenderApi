@@ -46,19 +46,15 @@ public class FeedService {
         Long feedUserId = feed.getUser().getId();
         Long loginUserId = loginUser.getUserId();
 
-        // 아이디 일치시 수정실행, 미일치시 예외처리
-        try {
-            if (feedUserId == loginUserId) {
-                feed.update(requestDto);
-                return new FeedResponseDto(feed);
-            } else {
-                throw new AccessDeniedException("자신의 게시글만 수정할 수 있습니다.");
-            }
-        } catch (AccessDeniedException e) {
-            log.error(e.getMessage());
-            throw new AccessDeniedException("자신의 게시글만 삭제할 수 있습니다.");
+        // 아이디 미일치시 예외처리
+        if (feedUserId != loginUserId) {
+            throw new AccessDeniedException("자신의 게시글만 수정할 수 있습니다.");
         }
 
+        feed.update(requestDto.toEntity());
+        Feed savedFeed = feedRepository.save(feed);
+
+        return new FeedResponseDto(savedFeed);
     }
 
     public void deleteFeed(Long id, UserTokenDto loginUser) throws AccessDeniedException {
@@ -71,21 +67,17 @@ public class FeedService {
         Long loginUserId = loginUser.getUserId();
 
         // 아이디 일치시 수정실행, 미일치시 예외처리
-        try {
-            if (feedUserId == loginUserId) {
-                feedRepository.delete(feed);
-            } else {
+
+            if (feedUserId != loginUserId) {
                 throw new AccessDeniedException("자신의 게시글만 삭제할 수 있습니다.");
             }
-        } catch (AccessDeniedException e) {
-            log.error(e.getMessage());
-            throw new AccessDeniedException("자신의 게시글만 삭제할 수 있습니다.");
-        }
+        feedRepository.delete(feed);
+
     }
 
     //게시글(피드) 작성
     @org.springframework.transaction.annotation.Transactional
-    public FeedSaveResponseDto saveFeed(UserTokenDto tokenUser,FeedSaveRequestDto feedSaveRequestDto) {
+    public FeedSaveResponseDto saveFeed(UserTokenDto tokenUser, FeedSaveRequestDto feedSaveRequestDto) {
         //UserId로 User객체 조회
         User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NullPointerException("User ID가 존재하지 않습니다."));
 
@@ -139,8 +131,8 @@ public class FeedService {
     }
 
     //팔로우한 사람들의 피드 목록 보기
-    public Page<FeedSimpleResponseDto> getFollowFeeds(UserTokenDto tokenUser, int page){
-        User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(()->new NullPointerException("user Id가 유효하지 않습니다."));
+    public Page<FeedSimpleResponseDto> getFollowFeeds(UserTokenDto tokenUser, int page) {
+        User user = userRepository.findById(tokenUser.getUserId()).orElseThrow(() -> new NullPointerException("user Id가 유효하지 않습니다."));
 
         //사용자가 팔로우한 사용자목록(팔로우목록) 조회
         List<Follow> followList = followRepository.findAllByStandardId(user);
